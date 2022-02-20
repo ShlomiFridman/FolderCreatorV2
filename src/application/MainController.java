@@ -16,9 +16,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class MainController {
 
+	public static Stage stage;
+	
 	@FXML
 	private TextField rootField;
 
@@ -34,6 +37,9 @@ public class MainController {
 	@FXML
 	private VBox foldersVBox;
 
+	@FXML
+	private VBox mainVBox;
+	
 	@FXML
 	private Button createBtn;
 
@@ -58,7 +64,8 @@ public class MainController {
 			checkBoxMap.put(cb, sub);
 			foldersVBox.getChildren().add(cb);
 		}
-		// init subjects files
+		// init subjects files, adjust minHeight
+		updateHeight();
 		// init date
 		cal = Calendar.getInstance();
 		format = new SimpleDateFormat("yyyy-MM-dd");
@@ -106,6 +113,14 @@ public class MainController {
 		dayField.setText(getDate());
 	}
 
+	private void updateHeight() {
+		double neededHeight = 100 + checkBoxMap.size()*20;
+		System.out.println(neededHeight);
+		System.out.println(mainVBox.getHeight());
+		if (mainVBox.getHeight() < neededHeight)
+			mainVBox.setPrefHeight(neededHeight);
+	}
+	
 	// return formated date string yyyy-MM-dd
 	private String getDate() {
 		return format.format(cal.getTime());

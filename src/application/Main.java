@@ -16,6 +16,7 @@ public class Main extends Application {
 			loader.setLocation(getClass().getResource("MainWindow.fxml"));
 			VBox root = loader.load();
 			Scene scene = new Scene(root);
+			MainController.stage = primaryStage;
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setX(100);
