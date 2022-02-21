@@ -1,6 +1,5 @@
 package application;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -10,17 +9,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class MainController {
-
-	public static Stage stage;
 	
 	@FXML
 	private TextField rootField;
@@ -80,6 +78,9 @@ public class MainController {
 
 	@FXML
 	void createFolders(ActionEvent event) {
+		// cooldown in case of double click
+		if (this.createBtn.getStyleClass().contains("clicked"))
+			return;
 		// iterate through subjects
 		Iterator<Entry<CheckBox, File>> it = checkBoxMap.entrySet().iterator();
 		while (it.hasNext()) {
@@ -89,6 +90,13 @@ public class MainController {
 				createFolder(entry.getValue());
 			}
 		}
+		// change the btn color for 1.3sec to show the creation was successful
+		this.createBtn.getStyleClass().add("clicked");
+		PauseTransition pause = new PauseTransition(Duration.millis(1300));
+		pause.setOnFinished(ev -> {
+			createBtn.getStyleClass().remove("clicked");
+		});
+		pause.play();
 	}
 
 	private void createFolder(File subject) {
