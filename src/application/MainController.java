@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -19,7 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 public class MainController {
-	
+
 	@FXML
 	private TextField rootField;
 
@@ -41,6 +42,9 @@ public class MainController {
 	@FXML
 	private Button createBtn;
 
+	@FXML
+	public Button createBtnWithEx;
+
 	HashMap<CheckBox, File> checkBoxMap;
 
 	File root;
@@ -51,12 +55,12 @@ public class MainController {
 	public void initialize() throws IOException {
 		// init root
 		root = new File(".");
-		rootField.setText(root.getCanonicalPath().toString());
+		rootField.setText(root.getCanonicalPath());
 		// init subjects
 		checkBoxMap = new HashMap<>();
-		for (String subDir : root.list((current, name) -> {
-			return new File(current, name).isDirectory();
-		})) {
+		for (String subDir : Objects.requireNonNull(root.list((current, name) -> {
+            return new File(current, name).isDirectory();
+        }))) {
 			File sub = new File(root, subDir);
 			CheckBox cb = new CheckBox(sub.getName());
 			checkBoxMap.put(cb, sub);
@@ -78,28 +82,34 @@ public class MainController {
 
 	@FXML
 	void createFolders(ActionEvent event) {
+		createAction(createBtn, false);
+	}
+	@FXML
+	void createFoldersWithEx(ActionEvent event) {
+		createAction(createBtnWithEx, true);
+	}
+
+	private void createAction(Button btn, boolean withEx){
 		// cooldown in case of double click
-		if (this.createBtn.getStyleClass().contains("clicked"))
+		if (btn.getStyleClass().contains("clicked"))
 			return;
 		// iterate through subjects
-		Iterator<Entry<CheckBox, File>> it = checkBoxMap.entrySet().iterator();
-		while (it.hasNext()) {
-			Entry<CheckBox, File> entry = it.next();
-			// if the subject's check-box is selected, call createFolder function on it 
+		for (Entry<CheckBox, File> entry : checkBoxMap.entrySet()) {
+			// if the subject's check-box is selected, call createFolder function on it
 			if (entry.getKey().isSelected()) {
-				createFolder(entry.getValue());
+				createFolder(entry.getValue(), withEx);
 			}
 		}
 		// change the btn color for 1.3sec to show the creation was successful
-		this.createBtn.getStyleClass().add("clicked");
+		btn.getStyleClass().add("clicked");
 		PauseTransition pause = new PauseTransition(Duration.millis(1300));
 		pause.setOnFinished(ev -> {
-			createBtn.getStyleClass().remove("clicked");
+			btn.getStyleClass().remove("clicked");
 		});
 		pause.play();
 	}
 
-	private void createFolder(File subject) {
+	private void createFolder(File subject, boolean withEx) {
 		try {
 			File folder = new File(subject, getDate());
 			// if there isn't a folder for the date, create a new folder
@@ -108,7 +118,9 @@ public class MainController {
 			else
 				return;
 			// create the notes.docx file
-			new File(folder,"Notes.docx").createNewFile();
+			new File(folder,"Notes_lec.docx").createNewFile();
+			if (withEx)
+				new File(folder,"Notes_ex.docx").createNewFile();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -133,4 +145,5 @@ public class MainController {
 	private String getDate() {
 		return format.format(cal.getTime());
 	}
+
 }

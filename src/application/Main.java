@@ -21,7 +21,7 @@ public class Main extends Application {
 			primaryStage.setX(100);
 			primaryStage.setY(100);
 			primaryStage.setTitle("Folder Creator");
-			primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResource("icon.png").toString()));
+			//primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResource("icon.png").toString()));
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
