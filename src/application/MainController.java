@@ -6,7 +6,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
 
@@ -134,7 +133,7 @@ public class MainController {
 	}
 
 	private void updateHeight() {
-		double neededHeight = 100 + checkBoxMap.size()*20;
+		double neededHeight = 130 + checkBoxMap.size()*20;
 		System.out.println(neededHeight);
 		System.out.println(mainVBox.getHeight());
 		if (mainVBox.getHeight() < neededHeight)

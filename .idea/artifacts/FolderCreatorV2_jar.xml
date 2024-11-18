@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FolderCreatorV2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FolderCreatorV2_jar</output-path>
+    <root id="archive" name="FolderCreatorV2.jar">
+      <element id="module-output" name="FolderCreatorV2" />
+    </root>
+  </artifact>
+</component>
